@@ -8,10 +8,15 @@ An end-to-end data science project utilizing machine learning to predict diabete
 
 Diabetes screening typically relies on invasive and costly laboratory blood tests (`fasting_blood_sugar`, `hba1c_level`). Community clinics operating under constrained budgets and medical staffing cannot test every visiting patient.
 
-> **Personal Motivation:**  
+
 > Coming from a family with a history of diabetes, this project was deeply personal. I set out to understand what truly drives diabetes risk before lab tests are ever drawn, and how data-driven triage can help community clinics prioritize testing where it matters most.
 
 This project delivers a **non-invasive pre-screening triage model** trained exclusively on demographic, physical, and modifiable lifestyle factors. By optimizing the decision threshold for clinical utility, our model catches **91.3% of all high-risk patients** (slashing missed cases from 175 down to 39 on the holdout test set), providing a dependable triage system to guide laboratory blood test referrals.
+
+### Data Source
+* **Platform:** Kaggle
+* **Dataset:** [Diabetes Risk Prediction Dataset](https://www.kaggle.com/datasets/mansiaggarwal88/diabetes-risk-prediction) by Mansi Aggarwal
+* **Scope:** 15,000 patient records across 19 features including demographics, physical measurements, modifiable lifestyle habits, and clinical risk classifications.
 
 ---
 
