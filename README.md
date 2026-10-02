@@ -4,11 +4,14 @@ An end-to-end data science project utilizing machine learning to predict diabete
 
 ---
 
-## 1. Executive Summary
+## 1. Executive Summary & Motivation
 
-Diabetes screening involves invasive and costly laboratory blood tests (`fasting_blood_sugar`, `hba1c_level`). Community clinics operating under budget and staffing constraints cannot test every patient. 
+Diabetes screening typically relies on invasive and costly laboratory blood tests (`fasting_blood_sugar`, `hba1c_level`). Community clinics operating under constrained budgets and medical staffing cannot test every visiting patient.
 
-This project develops a **non-invasive pre-screening triage model** trained solely on demographic, physical, and modifiable lifestyle factors. By optimizing the decision threshold for clinical utility, our model captures **91.3% of all high-risk patients** (slashing missed cases from 175 down to 39 on the test set), providing a dependable tool to triage patients for laboratory follow-up.
+> **Personal Motivation:**  
+> Coming from a family with a history of diabetes, this project was deeply personal. I set out to understand what truly drives diabetes risk before lab tests are ever drawn, and how data-driven triage can help community clinics prioritize testing where it matters most.
+
+This project delivers a **non-invasive pre-screening triage model** trained exclusively on demographic, physical, and modifiable lifestyle factors. By optimizing the decision threshold for clinical utility, our model catches **91.3% of all high-risk patients** (slashing missed cases from 175 down to 39 on the holdout test set), providing a dependable triage system to guide laboratory blood test referrals.
 
 ---
 
@@ -22,9 +25,13 @@ This project develops a **non-invasive pre-screening triage model** trained sole
 
 | Question Type | Business Question | Data-Backed Finding |
 |---|---|---|
-| **1. Descriptive** | What share of patients in each age group and BMI category has high diabetes risk? | Risk escalates steeply with age and adiposity. High-risk prevalence reaches **32.8% in patients aged 60+** (vs 4.3% in ages 18–30) and **34.8% in the Obese category** (vs 5.9% in Underweight). |
+| **1. Descriptive** | What share of patients in each age group and BMI category has high diabetes risk? | Risk escalates steeply with age and adiposity. High-risk prevalence reaches **32.8% in patients aged 60+** (vs. 4.3% in ages 18–30) and **34.8% in the Obese category** (vs. 5.9% in Underweight). |
 | **2. Predictive** | Which patients are most likely to be high risk for screening prioritization? | Our tuned Gradient Boosted Decision Tree triage model achieves **91.3% Recall** on holdout patients, accurately flagging high-risk individuals before invasive tests are ordered. |
 | **3. Prescriptive** | Which modifiable lifestyle factors show the largest risk difference? | **Physical activity** is by far the strongest modifiable factor with an **11.2 percentage-point risk spread** (Sedentary: 21.0% vs Active: 9.8%). In comparison, smoking (1.1 pp) and alcohol consumption (1.3 pp) exhibited minor variations. |
+
+<p align="center">
+  <img src="reports/figures/02_age_bmi_risk_heatmap.png" width="80%" alt="Age Group vs BMI Category Heatmap" />
+</p>
 
 ---
 
@@ -35,9 +42,9 @@ Following the industry-standard **CRISP-DM** methodology, this repository is org
 ```
 diabetes-risk-analysis/
 ├── data/
-│   ├── diabetes_risk.csv          # Raw dataset (15,000 rows, 19 columns)
-│   ├── diabetes_risk_cleaned.csv  # Cleaned dataset (missing values handled)
-│   └── processed/                 # Train/test split matrices (scaled & unscaled)
+│   ├── diabetes_risk.csv              # Raw dataset (15,000 rows, 19 columns)
+│   ├── diabetes_risk_cleaned.csv      # Cleaned dataset (missing values handled)
+│   └── processed/                     # Train/test split matrices (scaled & unscaled)
 ├── models/
 │   └── diabetes_risk_screener.joblib  # Production-ready trained triage model
 ├── notebooks/
@@ -46,7 +53,14 @@ diabetes-risk-analysis/
 │   ├── 04_eda.ipynb                   # Demographic, clinical, & lifestyle exploratory analysis
 │   ├── 05_feature_engineering.ipynb   # Domain metrics, leakage control, encoding, & split
 │   └── 06_modeling.ipynb              # Model tournament, threshold tuning, & evaluation
-└── README.md
+├── reports/
+│   └── figures/                       # High-resolution (300 DPI) publication-ready plots
+│       ├── 01_confusion_matrix_comparison.png
+│       ├── 02_age_bmi_risk_heatmap.png
+│       ├── 03_top_feature_importances.png
+│       └── 04_lifestyle_factors_impact.png
+├── requirements.txt                   # Environment reproduction dependencies
+└── README.md                          # Project documentation
 ```
 
 ---
@@ -73,6 +87,10 @@ In public health screening, a **False Negative** (leaving a high-risk diabetic p
 * **At Default Cutoff (0.50):** The model missed **175** high-risk patients (Recall: 61.1%).
 * **At Clinical Triage Cutoff (0.27):** Missed patients dropped from 175 to **39**, successfully capturing **411 out of 450 (91.3%)** high-risk individuals in the holdout test set.
 
+<p align="center">
+  <img src="reports/figures/01_confusion_matrix_comparison.png" width="95%" alt="Confusion Matrix Comparison" />
+</p>
+
 ---
 
 ## 5. Top Risk Drivers (Permutation Feature Importance)
@@ -84,9 +102,17 @@ Permutation importance identified the key non-invasive factors driving predictio
 4. **Waist Circumference (cm)** — Central adiposity and visceral fat marker
 5. **Physical Activity Level** — Dominant modifiable behavioral lever
 
+<p align="center">
+  <img src="reports/figures/03_top_feature_importances.png" width="85%" alt="Top Feature Importances" />
+</p>
+
 ---
 
 ## 6. Actionable Stakeholder Recommendations
+
+<p align="center">
+  <img src="reports/figures/04_lifestyle_factors_impact.png" width="80%" alt="Lifestyle Factors Impact" />
+</p>
 
 ### For the Clinic Screening Team:
 1. **Implement Algorithmic Triage:** Prioritize patients with a model risk score $\ge 0.27$ for fasting plasma glucose / HbA1c blood tests. This guarantees catching $>90\%$ of high-risk cases while preventing random testing.
@@ -108,7 +134,7 @@ Permutation importance identified the key non-invasive factors driving predictio
 
 2. **Install dependencies:**
    ```bash
-   pip install pandas numpy matplotlib seaborn scikit-learn joblib
+   pip install -r requirements.txt
    ```
 
 3. **Execute the pipeline notebooks in order:**
